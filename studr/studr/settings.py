@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'core',
     'corsheaders',
     'boilerplate',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -62,11 +62,22 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
       ],
 }
+
 SIMPLE_JWT = {
      'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
      'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
      'ROTATE_REFRESH_TOKENS': True,
      'BLACKLIST_AFTER_ROTATION': True
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    }
 }
 
 ROOT_URLCONF = 'studr.urls'

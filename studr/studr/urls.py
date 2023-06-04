@@ -19,6 +19,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt import views as jwt_views
+from core.views import getID
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -39,5 +40,7 @@ urlpatterns = [
           name ='token_obtain_pair'),
     path('login/refresh/', 
           jwt_views.TokenRefreshView.as_view(), 
-          name ='token_refresh')
+          name ='token_refresh'),
+    path('getid/', getID.as_view(), name='getid' )
+        
 ]
