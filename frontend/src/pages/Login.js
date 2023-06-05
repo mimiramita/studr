@@ -11,7 +11,7 @@ function Login() {
     const user = { username: username, password: password };
     alert(user.username);
     try {
-      const { data } = await axios.post("http://localhost:8000/login/", user, {
+      const { data } = await axios.post("http://localhost:8000/core/login/", user, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

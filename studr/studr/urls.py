@@ -33,14 +33,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),
+    path('core/', include('core.urls')),
     path('docs/', schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),
-    path('login/', 
-          jwt_views.TokenObtainPairView.as_view(), 
-          name ='token_obtain_pair'),
-    path('login/refresh/', 
-          jwt_views.TokenRefreshView.as_view(), 
-          name ='token_refresh'),
     path('getid/', getID.as_view(), name='getid' )
         
 ]
