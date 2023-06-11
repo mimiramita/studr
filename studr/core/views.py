@@ -1,6 +1,5 @@
 from django.shortcuts import render
-
-# Create your views here.
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
@@ -9,6 +8,17 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth.models import User
+from rest_framework import generics
+from .serializers import RegisterSerializer
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
 
 #Example data.
 #access_token_str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3BrIjoxLCJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiY29sZF9zdHVmZiI6IuKYgyIsImV4cCI6MTIzNDU2LCJqdGkiOiJmZDJmOWQ1ZTFhN2M0MmU4OTQ5MzVlMzYyYmNhOGJjYSJ9.NHlztMGER7UADHZJlxNG0WSi22a2KaYSfd1S-AuT7lU'
@@ -45,3 +55,8 @@ class getID(APIView):
         except Exception as e:
             return Response({'status': False, 'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer

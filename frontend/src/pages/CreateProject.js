@@ -1,28 +1,24 @@
 import React, { useState } from "react";
-import video1 from "../blue-ink.mp4";
 import axios from "axios";
+import video1 from "../blue-ink.mp4";
 
-function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+function CreateProject() {
+  const [title, setTitle] = useState("");
+  const [link, setLink] = useState("");
   const submit = async (e) => {
     e.preventDefault();
 
-    const user = { username: username, password: password };
-    alert(user.username);
+    const project = { title: title, link: link };
     try {
-      const { data } = await axios.post("http://localhost:8000/core/login/", user, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
-      alert(data.access);
-      localStorage.clear();
-      localStorage.setItem("access_token", data.access);
-      localStorage.setItem("refresh_token", data.refresh);
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${data["access"]}`;
-      alert("done");
+      const { data } = await axios.post(
+        "http://localhost:8000/project/createproject/",
+        project,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      alert(data);
     } catch (e) {
       alert(e);
     }
@@ -72,35 +68,35 @@ function Login() {
           >
             <div class="row mb-3">
               <label for="inputEmail3" class="col-sm-2 col-form-label">
-                Username
+                Title
               </label>
               <div class="col-sm-10">
                 <input
                   type="text"
                   class="form-control"
                   id="inputEmail3"
-                  placeholder="Username"
-                  name="username"
-                  value={username}
+                  placeholder="Title"
+                  name="title"
+                  value={title}
                   required
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
             </div>
             <div class="row mb-3">
               <label for="inputPassword3" class="col-sm-2 col-form-label">
-                Password
+                Link
               </label>
               <div class="col-sm-10">
                 <input
-                  type="password"
+                  type="text"
                   class="form-control"
                   id="inputPassword3"
-                  placeholder="Password"
-                  name="password"
-                  value={password}
+                  placeholder="Link"
+                  name="link"
+                  value={link}
                   required
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setLink(e.target.value)}
                 />
               </div>
             </div>
@@ -126,4 +122,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default CreateProject;
