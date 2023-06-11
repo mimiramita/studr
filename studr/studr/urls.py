@@ -36,6 +36,6 @@ urlpatterns = [
     path('core/', include('core.urls')),
     path('docs/', schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),
-    path('getid/', getID.as_view(), name='getid' )
-        
+    path('getid/', getID.as_view(), name='getid' ),
+    path('project/', include('project.urls'))
 ]
