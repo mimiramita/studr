@@ -11,14 +11,18 @@ function Login() {
     const user = { username: username, password: password };
     alert(user.username);
     try {
-      const { data } = await axios.post("http://localhost:8000/core/login/", user, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const { data } = await axios.post(
+        "http://localhost:8000/core/login/",
+        user,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
       alert(data.access);
-      localStorage.clear();
-      localStorage.setItem("access_token", data.access);
-      localStorage.setItem("refresh_token", data.refresh);
+      sessionStorage.clear();
+      sessionStorage.setItem("access_token", data.access);
+      sessionStorage.setItem("refresh_token", data.refresh);
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data["access"]}`;
@@ -26,7 +30,7 @@ function Login() {
     } catch (e) {
       alert(e);
     }
-    window.location.href = "/";
+    window.location.href = "/createproject";
   };
   return (
     <div style={{ minWidth: "100%", height: "100vh", overflow: "hidden" }}>
