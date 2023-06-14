@@ -22,11 +22,11 @@ class CreateProject(APIView):
     )
     def post(self, request):
         try:
-            # user = request.user
-            # account = Account.objects.filter(user=user)
-            # print(account)
-            # project_info = json.loads(request.body.decode("utf-8"))
-            # print(project_info)
+            user = request.user
+            account = Account.objects.filter(user=user)[0]
+            project_info = json.loads(request.body.decode("utf-8"))
+            new_project = Project.objects.create(project_name=project_info['title'], owner=account, video_link=project_info['link'])
+            new_project.save()
             return Response(
                 {"status": True, "message": "success"}, status=status.HTTP_200_OK
             )
