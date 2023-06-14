@@ -7,22 +7,31 @@ function CreateProject() {
   const [link, setLink] = useState("");
   const submit = async (e) => {
     e.preventDefault();
-
     const project = { title: title, link: link };
+    alert(sessionStorage);
+    const token = sessionStorage.getItem("access_token");
+    if (token == null) {
+      window.location.href = "/login";
+    }
+    alert(token);
     try {
+      axios.defaults.withCredentials = true; // even for get requests if
+      // demand session authentication
       const { data } = await axios.post(
         "http://localhost:8000/project/createproject/",
         project,
         {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
         }
       );
       alert(data);
     } catch (e) {
       alert(e);
     }
-    window.location.href = "/";
+    window.location.href = "";
   };
   return (
     <div style={{ minWidth: "100%", height: "100vh", overflow: "hidden" }}>
