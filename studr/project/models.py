@@ -7,3 +7,4 @@ class Project(models.Model):
     owner = models.ForeignKey('core.Account', on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True, null=True)
     video_link = models.CharField(max_length=1000, null=True)
+    text = models.TextField(null=True)
