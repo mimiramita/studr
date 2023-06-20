@@ -87,3 +87,6 @@ def add_punctuation(text):
     return punctuated_text
 
 # print(speech_recognition("https://www.youtube.com/watch?v=kOEDG3j1bjs"))
+def answer_question(context, question):
+    question_answerer = pipeline(task="question-answering", model="my_awesome_qa_model")
+    return question_answerer(question=question, context=context)["answer"]
