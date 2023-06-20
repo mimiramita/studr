@@ -12,6 +12,7 @@ from pydub import AudioSegment
 import subprocess
 from pydub.utils import make_chunks
 import shutil
+from transformers import pipeline
 
 
 def speech_recognition(link):
