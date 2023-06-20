@@ -1,19 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function QueryBox() {
-  const sendMessage = () => {
-    const newMessageBox = document.createElement("div");
-    const newMessage = document.createTextNode("Hi");
-    const chatbox = document.getElementById("chatbox")
 
-    newMessageBox.appendChild(newMessage);
-    chatbox.appendChild(newMessageBox)
-  };
+function QueryBox() {
+    const [question,setQuestion] = useState("");
+    const handleClick = (event) => {
+        const newElement = document.createElement('div');
+        newElement.textContent = question;
+        document.getElementById('chatbox').appendChild(newElement);
+        setQuestion("");
+
+        const answer = document.createElement('div');
+        answer.textContent = "calculating...";
+        document.getElementById('chatbox').appendChild(answer);
+        event.preventDefault();
+    }
   return (
     <div>
       <div id="chatbox"></div>
-      <button id="send" onClick={sendMessage}>Send</button>
+      <form>
+        <input
+          type="text"
+          placeholder="Question"
+          name="question"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+        ></input>
+        <button id="send" onClick={handleClick}>
+          Send
+        </button>
+      </form>
     </div>
   );
 }
