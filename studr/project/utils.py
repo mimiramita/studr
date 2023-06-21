@@ -13,6 +13,7 @@ import subprocess
 from pydub.utils import make_chunks
 import shutil
 from transformers import pipeline
+from transformers import AutoModel, AutoTokenizer, BertForQuestionAnswering
 
 
 def speech_recognition(link):
@@ -68,12 +69,14 @@ def add_punctuation(text):
             stop_index = min(decoded_output.find("..."), decoded_output.find(" - - "))
         # print(decoded_output)
 
-        punctuated_text += decoded_output[0:stop_index+1] + " "
+        punctuated_text += decoded_output[0 : stop_index + 1] + " "
         previous_text = decoded_output[0:stop_index]
         # print("previous_text: " + previous_text)
 
-        start_search_text = max(previous_text.rfind("."), previous_text.rfind(","), previous_text.rfind("?"))
-        search_text = previous_text[start_search_text+2:].lower()
+        start_search_text = max(
+            previous_text.rfind("."), previous_text.rfind(","), previous_text.rfind("?")
+        )
+        search_text = previous_text[start_search_text + 2 :].lower()
         # print("search_sentence: " + search_text)
 
         start_new_text = text.find(search_text) + len(search_text)
@@ -87,7 +90,16 @@ def add_punctuation(text):
     punctuated_text += decoded_output
     return punctuated_text
 
+
 # print(speech_recognition("https://www.youtube.com/watch?v=kOEDG3j1bjs"))
 def answer_question(context, question):
-    question_answerer = pipeline(task="question-answering", model="my_awesome_qa_model")
+    question_answerer = pipeline(
+        task="question-answering",
+        model=BertForQuestionAnswering.from_pretrained(
+            "deepset/bert-base-cased-squad2"
+        ),
+        tokenizer=AutoTokenizer.from_pretrained("deepset/bert-base-cased-squad2"),
+    )
+
     return question_answerer(question=question, context=context)["answer"]
+
