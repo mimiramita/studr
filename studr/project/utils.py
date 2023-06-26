@@ -20,7 +20,9 @@ def speech_recognition(link):
     yt = YouTube(link)
     video = yt.streams.filter(only_audio=True).first()
     video.download(filename="audio.mp3")
-
+    if os.path.exists('audio.wav'):
+        os.remove('audio.wav')
+        
     subprocess.call(["ffmpeg", "-i", "audio.mp3", "audio.wav"])
 
     myaudio = AudioSegment.from_file("audio.wav", "wav")
