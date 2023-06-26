@@ -10,8 +10,9 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import get_authorization_header
 from .utils import speech_recognition
+from project.tasks import create_project
 
-# Create your views here.
+#celery -A studr worker -l info
 class CreateProject(APIView):
     permission_classes = [IsAuthenticated,]
     project_title = openapi.Parameter(
@@ -26,13 +27,13 @@ class CreateProject(APIView):
             user = request.user
             account = Account.objects.filter(user=user)[0]
             project_info = json.loads(request.body.decode("utf-8"))
-            text = speech_recognition(project_info['link'])
-            new_project = Project.objects.create(project_name=project_info['title'], owner=account, video_link=project_info['link'])
-            new_project.save()
+            create_project.delay("hi","hi")
+        
             return Response(
                 {"status": True, "message": "success"}, status=status.HTTP_200_OK
             )
         except Exception as e:
+            print(e)
             return Response(
                 {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
             )
