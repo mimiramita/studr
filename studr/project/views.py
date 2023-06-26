@@ -9,6 +9,7 @@ from core.models import Account
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import get_authorization_header
+from .utils import speech_recognition
 
 # Create your views here.
 class CreateProject(APIView):
@@ -25,6 +26,7 @@ class CreateProject(APIView):
             user = request.user
             account = Account.objects.filter(user=user)[0]
             project_info = json.loads(request.body.decode("utf-8"))
+            text = speech_recognition(project_info['link'])
             new_project = Project.objects.create(project_name=project_info['title'], owner=account, video_link=project_info['link'])
             new_project.save()
             return Response(
