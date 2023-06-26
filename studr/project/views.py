@@ -4,15 +4,14 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 import json
-from project.models import Project
 from core.models import Account
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import get_authorization_header
-from .utils import speech_recognition
 from project.tasks import create_project
 
+#start every time
 #celery -A studr worker -l info
+#brew services restart redis
+#redis-cli shutdown
 class CreateProject(APIView):
     permission_classes = [IsAuthenticated,]
     project_title = openapi.Parameter(
@@ -27,7 +26,7 @@ class CreateProject(APIView):
             user = request.user
             account = Account.objects.filter(user=user)[0]
             project_info = json.loads(request.body.decode("utf-8"))
-            create_project.delay("hi","hi")
+            create_project.delay(account.account_id, project_info)
         
             return Response(
                 {"status": True, "message": "success"}, status=status.HTTP_200_OK
