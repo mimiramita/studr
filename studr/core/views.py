@@ -15,6 +15,7 @@ from .serializers import MyTokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
+from core.models import Account
 import json
 
 
@@ -47,7 +48,6 @@ class getID(APIView):
 class RegisterView(APIView):
     permission_classes = (AllowAny,)
     def post(self, request):
-        print(request.body)
         new_user_info = json.loads(request.body.decode("utf-8"))
         user = User.objects.create(
             username=new_user_info["username"],
@@ -58,6 +58,13 @@ class RegisterView(APIView):
 
         user.set_password(new_user_info["password"])
         user.save()
+
+        current_user = User.objects.filter(username=new_user_info["username"])[0]
+        account = Account.objects.create(
+            user=current_user
+        )
+        account.save()
+
         return Response({'status': False, 'message': "No time entries for this user"},
                                     status=status.HTTP_200_OK)
 # class RegisterView(generics.CreateAPIView):

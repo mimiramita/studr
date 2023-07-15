@@ -68,7 +68,7 @@ function Login() {
             Hello, Welcome Back!
           </p>
           <p style={{ fontWeight: "100", color: "#5C5C5C", fontSize: "15px" }}>
-            Don't have an account? <a href="/register">sign up</a>
+            Don't have an account? <a href="/signin">sign up</a>
           </p>
           <form
             style={{ padding: "20px 30px", margin: "auto" }}

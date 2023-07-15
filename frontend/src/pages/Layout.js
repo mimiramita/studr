@@ -5,9 +5,10 @@ import Navbar_Login from "../Navbar_Login"
 
 const Layout = () => {
   let login = window.location.pathname == "/login";
+  let signin = window.location.pathname == "/signin";
   return (
     <>
-    {login
+    {login || signin
         ? <div></div>
         : <Navbar />
       }

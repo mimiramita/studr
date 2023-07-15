@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import CreateProject from "./pages/CreateProject";
 import QueryBox from "./pages/Query";
 import TestQuery from "./pages/QueryTest";
+import SignIn from "./pages/Signin";
 
 export default function App() {
   return (
@@ -13,10 +14,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="home" element={<Home />} />
+          <Route path="signin" element={<SignIn />} />
           <Route path="login" element={<Login />} />
           <Route path="createproject" element={<CreateProject />} />
           <Route path="query" element={<QueryBox />} />
-          <Route path="testquery" element={<TestQuery/>} /> 
+          <Route path="testquery" element={<TestQuery />} />
         </Route>
       </Routes>
     </BrowserRouter>
