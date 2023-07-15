@@ -5,8 +5,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import CreateProject from "./pages/CreateProject";
 import QueryBox from "./pages/Query";
-import TestQuery from "./pages/QueryTest";
+import QueryTest from "./pages/QueryTest";
 import SignIn from "./pages/Signin";
+import DashBoard from "./pages/Dashboard";
+import "animate.css";
 
 export default function App() {
   return (
@@ -18,7 +20,8 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="createproject" element={<CreateProject />} />
           <Route path="query" element={<QueryBox />} />
-          <Route path="testquery" element={<TestQuery />} />
+          <Route path="testquery" element={<QueryTest />} />
+          <Route path="dashboard" element={<DashBoard />} />
         </Route>
       </Routes>
     </BrowserRouter>

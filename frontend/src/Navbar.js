@@ -6,7 +6,7 @@ function Navbar() {
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          Navbar
+          Studr
         </a>
         <button
           class="navbar-toggler"
@@ -19,25 +19,31 @@ function Navbar() {
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div
+          class="collapse navbar-collapse"
+          id="navbarNav"
+          style={{ position: "absolute", right: "10px" }}
+        >
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/login">
-                Home
+                Dashboard
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
-                Features
+                About
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
-                Pricing
+                Setting
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled">Disabled</a>
+              <a class="nav-link" href="#">
+                Contact
+              </a>
             </li>
           </ul>
         </div>
