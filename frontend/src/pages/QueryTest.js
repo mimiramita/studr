@@ -3,7 +3,7 @@ import axios from "axios";
 import video1 from "../blue-ink.mp4";
 
 
-function TestQuery() {
+function QueryTest() {
   const [title, setTitle] = useState("");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -136,4 +136,4 @@ function TestQuery() {
   );
 }
 
-export default TestQuery;
+export default QueryTest;
