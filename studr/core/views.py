@@ -1,29 +1,25 @@
-from django.shortcuts import render
 from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from drf_yasg import openapi
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.models import User
-from rest_framework import generics
-from .serializers import RegisterSerializer
 from .serializers import MyTokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth import get_user_model
 from core.models import Account
 import json
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.contrib.auth.password_validation import validate_password
+from django import forms
 
 
 class MyObtainTokenPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
-
-from rest_framework.decorators import api_view, permission_classes
 
 class getID(APIView):
     user_id = openapi.Parameter('id', in_=openapi.IN_QUERY,
@@ -49,6 +45,23 @@ class RegisterView(APIView):
     permission_classes = (AllowAny,)
     def post(self, request):
         new_user_info = json.loads(request.body.decode("utf-8"))
+
+        if new_user_info["password"] != new_user_info["password2"]:
+            return Response({'status': False, 'message': "Passwords do not match"},
+                                    status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            validate_password(new_user_info["password"])
+        except forms.ValidationError as error:
+            return Response({'status': False, 'message': str(error)},
+                                    status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            validate_email(new_user_info["email"])
+        except ValidationError as error:
+            return Response({'status': False, 'message': str(error)},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
         user = User.objects.create(
             username=new_user_info["username"],
             email=new_user_info["email"],
@@ -67,13 +80,3 @@ class RegisterView(APIView):
 
         return Response({'status': False, 'message': "No time entries for this user"},
                                     status=status.HTTP_200_OK)
-# class RegisterView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     permission_classes = (AllowAny,)
-#     serializer_class = RegisterSerializer
-# class RegisterView(generics.CreateAPIView):
-#     model = get_user_model()
-#     permission_classes = [
-#         AllowAny # Or anon users can't register
-#     ]
-#     serializer_class = RegisterSerializer
