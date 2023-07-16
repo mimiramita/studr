@@ -10,9 +10,23 @@ function DashBoard() {
         minWidth: "100%",
         height: "100vh",
         backgroundSize: "cover",
-        position: "fixed"
+        position: "fixed",
       }}
-    ></div>
+    >
+      <h1 style={{ padding: "40px" }}>Dashboard</h1>
+      <div style={{ paddingLeft: "5vw" }}>
+        <div class="project-glass" style={{ width: "300px" }}>
+          <img src="..." class="card-img-top" alt="..." />
+          <div class="card-body">
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+          </div>
+        </div>
+      </div>
+      {/* <div style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}}>Hi</div> */}
+    </div>
   );
 }
 // function DashBoard() {
