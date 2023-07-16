@@ -14,6 +14,7 @@
     "bootstrap": "^5.2.3",
     "jquery": "^3.7.0",
     "popper.js": "^1.16.1",
+    "react-backdrop-filter": "^2.1.0",
     "react-router-dom": "^6.11.1",
     "react-scripts": "^5.0.1",
     "react-spring": "^9.7.2",
