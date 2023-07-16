@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from project.tasks import create_project
 from project.utils import answer_question
 from project.models import Project
+from .serializers import ProjectInfo, ProjectInfoSerializer
 
 #start every time
 #celery -A studr worker -l info
@@ -56,12 +57,25 @@ class AnswerQuestion(APIView):
         try:
             user = request.user
             account = Account.objects.filter(user=user)[0]
-            print(account.account_id)
             active_project = Project.objects.filter(owner=account, project_name=request.query_params["project_name"])[0]
             context = active_project.text
             answer = answer_question(context, request.query_params["question"])
-            print(answer)
             return Response({'status': 'success', 'response': answer}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            )
+        
+class GetProjects(APIView):
+    permission_classes = [IsAuthenticated,]
+    def get(self, request):
+        try:
+            user = request.user
+            account = Account.objects.filter(user=user)[0]
+            projects = Project.objects.filter(owner=account)
+            projects_info = [ProjectInfo(project.project_id, project.project_name, project.owner.account_id, project.created_on, project.video_link, project.text) for project in projects]
+            serialized_projects = [ProjectInfoSerializer(project).data for project in projects_info]
+            return Response({'status': 'success', 'response': serialized_projects}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(
                 {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
