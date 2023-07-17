@@ -10,12 +10,10 @@ function QueryTest() {
   const submit = async (e) => {
     e.preventDefault();
     const question_info = { project_name: title, question: question };
-    alert(sessionStorage);
     const token = sessionStorage.getItem("access_token");
     if (token == null) {
       window.location.href = "/login";
     }
-    alert(token);
     try {
       axios.defaults.withCredentials = true; // even for get requests if
       // demand session authentication
