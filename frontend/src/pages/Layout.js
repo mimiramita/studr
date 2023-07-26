@@ -8,10 +8,10 @@ const Layout = () => {
   let signin = window.location.pathname == "/signin";
   return (
     <>
-    {login || signin
+    {/* {login || signin
         ? <div></div>
         : <Navbar />
-      }
+      } */}
       <Outlet />
     </>
   );

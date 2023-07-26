@@ -80,3 +80,5 @@ class GetProjects(APIView):
             return Response(
                 {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
             )
+
+# try returning list and other variables

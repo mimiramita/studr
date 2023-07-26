@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
 @import url('https://fonts.googleapis.com/css2?family=Manrope');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat'); 
 
 body {
   margin: 0;
@@ -51,6 +52,10 @@ code {
   font-family: 'Roboto Mono';
 }
 
+.montserrat {
+  font-family: 'Montserrat';
+}
+
 .manrope {
   font-family: 'Manrope';
 }
@@ -65,6 +70,10 @@ code {
 
 .w200 {
   font-weight: 200;
+}
+
+.w300 {
+  font-weight: 300;
 }
 
 .sidebar {

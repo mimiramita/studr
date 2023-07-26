@@ -9,7 +9,6 @@ function Login() {
     e.preventDefault();
 
     const user = { username: username, password: password };
-    alert(user.username);
     try {
       const { data } = await axios.post(
         "http://localhost:8000/core/login/",
@@ -19,18 +18,16 @@ function Login() {
           withCredentials: true,
         }
       );
-      alert(data.access);
       sessionStorage.clear();
       sessionStorage.setItem("access_token", data.access);
       sessionStorage.setItem("refresh_token", data.refresh);
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data["access"]}`;
-      alert("done");
     } catch (e) {
       alert(e);
     }
-    window.location.href = "/createproject";
+    window.location.href = "/dashboard";
   };
   return (
     <div style={{ minWidth: "100%", height: "100vh", overflow: "hidden" }}>
