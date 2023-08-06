@@ -30,4 +30,4 @@ class FolderInfoSerializer(serializers.Serializer):
     folder_name = serializers.CharField()
     account_id = serializers.IntegerField()
     created_on = serializers.DateTimeField()
-    projects = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    projects = serializers.ListField()

@@ -91,7 +91,7 @@ class GetFolders(APIView):
 
             folders_info = []
             for folder in folders:
-                projects = Project.objects.filter(folder=folder)
+                projects = Project.objects.filter(current_folder=folder)
                 projects_info = [ProjectInfo(project.project_id, project.project_name, project.owner.account_id, project.created_on, project.video_link, project.text) for project in projects]
                 serialized_projects = [ProjectInfoSerializer(project).data for project in projects_info]
                 folder_info = FolderInfo(folder_id=folder.folder_id, folder_name=folder.folder_name, account_id=folder.owner.account_id, created_on=folder.created_on, projects=serialized_projects)
