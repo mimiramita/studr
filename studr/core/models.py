@@ -7,3 +7,4 @@ class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account_created = models.DateTimeField(auto_now_add=True, blank=True)
     projects = models.ManyToManyField('project.Project', blank=True)
+    folders = models.ManyToManyField('project.Folder', blank=True)

@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/web";
-import background from "../Moon.svg";
 import axios from "axios";
+import logoWhite from "../logo-no-background.png";
 
 function DashBoard() {
   const token = sessionStorage.getItem("access_token");
@@ -9,6 +9,7 @@ function DashBoard() {
     window.location.href = "/login";
   }
   const [projects, setProjects] = useState([]);
+  const [username, setUsername] = useState(null);
   // even for get requests if
   useEffect(() => {
     axios
@@ -20,6 +21,16 @@ function DashBoard() {
       })
       .then((response) => {
         setProjects(response.data.response);
+      });
+    axios
+      .get("http://localhost:8000/core/getusername/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "applciation/json",
+        },
+      })
+      .then((response) => {
+        setUsername(response.data.response);
       });
   }, []);
   return (
@@ -35,11 +46,113 @@ function DashBoard() {
             width: "100%",
             height: "100%",
           }}
-        ></div>
+        >
+          <br></br>
+          <img
+            src={logoWhite}
+            width="130px"
+            height="22px"
+            style={{ margin: "auto", display: "block" }}
+          ></img>
+        </div>
       </div>
-      <div class="col-5" style={{ padding: "15px 25px" }}>
-        <div>Welcome back, Tom!</div>
-        <div style={{width: "100%", height: "20%", backgroundColor: "#ffffff", borderRadius: "30px"}}></div>
+      <div class="col-7" style={{ padding: "15px 25px" }}>
+        <div className="montserrat" style={{ fontSize: "25px" }}>
+          Welcome Back,
+        </div>
+        <div className="montserrat" style={{ fontSize: "25px" }}>
+          {username}
+        </div>
+        <div
+          style={{
+            width: "100%",
+            height: "auto",
+            backgroundColor: "#ffffff",
+            borderRadius: "30px",
+            marginTop: "20px",
+            padding: "15px",
+          }}
+        >
+          <p1>Recent Projects</p1>
+          <br></br>
+          <br></br>
+          <div class="row">
+            {projects.map((project) => (
+              <div class="col-4">
+                <div
+                  style={{
+                    width: "200px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba( 255, 255, 255, 0.18 )",
+                  }}
+                >
+                  <iframe
+                    style={{ borderRadius: "10px 10px 0px 0px" }}
+                    width="200"
+                    height="100"
+                    src={
+                      "https://www.youtube.com/embed/" +
+                      project.video_link.slice(
+                        project.video_link.indexOf("=") + 1
+                      )
+                    }
+                  ></iframe>
+                  <div class="card-body">
+                    <p class="card-text">
+                      <h4>{project.project_name}</h4>
+                      <div>Created on {project.created_on.slice(0, 10)}</div>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div
+          style={{
+            width: "100%",
+            height: "auto",
+            backgroundColor: "#ffffff",
+            borderRadius: "30px",
+            marginTop: "20px",
+            padding: "15px",
+          }}
+        >
+          <p1>Recent Projects</p1>
+          <br></br>
+          <br></br>
+          <div class="row">
+            {projects.map((project) => (
+              <div class="col-4">
+                <div
+                  style={{
+                    width: "200px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba( 255, 255, 255, 0.18 )",
+                  }}
+                >
+                  <iframe
+                    style={{ borderRadius: "10px 10px 0px 0px" }}
+                    width="200"
+                    height="100"
+                    src={
+                      "https://www.youtube.com/embed/" +
+                      project.video_link.slice(
+                        project.video_link.indexOf("=") + 1
+                      )
+                    }
+                  ></iframe>
+                  <div class="card-body">
+                    <p class="card-text">
+                      <h4>{project.project_name}</h4>
+                      <div>Created on {project.created_on.slice(0, 10)}</div>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
       <div class="col-5"></div>
     </div>
@@ -59,29 +172,29 @@ function DashBoard() {
 
     //   <div style={{ paddingLeft: "5vw" }}>
     //     <div class="row">
-    //       {projects.map((project) => (
-    //         <div class="col-3">
-    //           <div class="project-glass" style={{ width: "320px" }}>
-    //             <iframe
-    //               style={{ borderRadius: "10px 10px 0px 0px" }}
-    //               width="320"
-    //               height="180"
-    //               src={
-    //                 "https://www.youtube.com/embed/" +
-    //                 project.video_link.slice(
-    //                   project.video_link.indexOf("=") + 1
-    //                 )
-    //               }
-    //             ></iframe>
-    //             <div class="card-body">
-    //               <p class="card-text">
-    //                 <h4>{project.project_name}</h4>
-    //                 <div>Created on {project.created_on.slice(0, 10)}</div>
-    //               </p>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       ))}
+    // {projects.map((project) => (
+    //   <div class="col-3">
+    //     <div class="project-glass" style={{ width: "320px" }}>
+    //       <iframe
+    //         style={{ borderRadius: "10px 10px 0px 0px" }}
+    //         width="320"
+    //         height="180"
+    //         src={
+    //           "https://www.youtube.com/embed/" +
+    //           project.video_link.slice(
+    //             project.video_link.indexOf("=") + 1
+    //           )
+    //         }
+    //       ></iframe>
+    //       <div class="card-body">
+    //         <p class="card-text">
+    //           <h4>{project.project_name}</h4>
+    //           <div>Created on {project.created_on.slice(0, 10)}</div>
+    //         </p>
+    //       </div>
+    //     </div>
+    //   </div>
+    // ))}
     //     </div>
     //   </div>
     //   {/* <div style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}}>Hi</div> */}

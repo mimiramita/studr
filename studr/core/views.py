@@ -15,6 +15,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
 from django import forms
+from rest_framework.permissions import IsAuthenticated
 
 
 class MyObtainTokenPairView(TokenObtainPairView):
@@ -80,3 +81,15 @@ class RegisterView(APIView):
 
         return Response({'status': False, 'message': "No time entries for this user"},
                                     status=status.HTTP_200_OK)
+    
+class GetUsername(APIView):
+    permission_classes = [IsAuthenticated,]
+    def get(self, request):
+        try:
+            user = request.user
+            username = user.username
+            return Response({'status': 'success', 'response': username}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            )

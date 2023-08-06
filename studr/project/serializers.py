@@ -16,3 +16,18 @@ class ProjectInfoSerializer(serializers.Serializer):
     created_on = serializers.DateTimeField()
     video_link = serializers.CharField()
     text = serializers.CharField()
+
+class FolderInfo:
+    def __init__(self, folder_id, folder_name, account_id, created_on, projects):
+        self.folder_id = folder_id
+        self.folder_name = folder_name
+        self.account_id = account_id
+        self.created_on = created_on
+        self.projects = projects
+
+class FolderInfoSerializer(serializers.Serializer):
+    folder_id = serializers.IntegerField()
+    folder_name = serializers.CharField()
+    account_id = serializers.IntegerField()
+    created_on = serializers.DateTimeField()
+    projects = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
