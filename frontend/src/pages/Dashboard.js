@@ -1,7 +1,8 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import axios from "axios";
-import logoWhite from "../logo-no-background.png";
+import logo from "../PlayLamp.png";
+import recent from "../recent.png";
 
 function DashBoard() {
   const token = sessionStorage.getItem("access_token");
@@ -34,127 +35,174 @@ function DashBoard() {
       });
   }, []);
   return (
-    <div
-      class="row"
-      style={{ width: "100vw", height: "100vh", backgroundColor: "#f8f7ff" }}
-    >
-      <div class="col-2" style={{ padding: "15px 25px" }}>
+    <div class="container-fluid">
+      <div class="row" style={{ backgroundColor: "#FFFFFF" }}>
         <div
+          class="col-2"
           style={{
-            backgroundColor: "#002855",
-            borderRadius: "30px",
-            width: "100%",
-            height: "100%",
+            backgroundColor: "white",
+            height: "100vh",
+            padding: "0px",
+            textAlign: "center",
           }}
         >
-          <br></br>
           <img
-            src={logoWhite}
-            width="130px"
-            height="22px"
+            src={logo}
+            width="230px"
+            height="110px"
             style={{ margin: "auto", display: "block" }}
           ></img>
-        </div>
-      </div>
-      <div class="col-7" style={{ padding: "15px 25px" }}>
-        <div className="montserrat" style={{ fontSize: "25px" }}>
-          Welcome Back,
-        </div>
-        <div className="montserrat" style={{ fontSize: "25px" }}>
-          {username}
-        </div>
-        <div
-          style={{
-            width: "100%",
-            height: "auto",
-            backgroundColor: "#ffffff",
-            borderRadius: "30px",
-            marginTop: "20px",
-            padding: "15px",
-          }}
-        >
-          <p1>Recent Projects</p1>
-          <br></br>
-          <br></br>
-          <div class="row">
-            {projects.map((project) => (
-              <div class="col-4">
-                <div
-                  style={{
-                    width: "200px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba( 255, 255, 255, 0.18 )",
-                  }}
-                >
-                  <iframe
-                    style={{ borderRadius: "10px 10px 0px 0px" }}
-                    width="200"
-                    height="100"
-                    src={
-                      "https://www.youtube.com/embed/" +
-                      project.video_link.slice(
-                        project.video_link.indexOf("=") + 1
-                      )
-                    }
-                  ></iframe>
-                  <div class="card-body">
-                    <p class="card-text">
-                      <h4>{project.project_name}</h4>
-                      <div>Created on {project.created_on.slice(0, 10)}</div>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+
+          <button
+            className="roboto-mono"
+            style={{
+              fontSize: "14px",
+              backgroundColor: "#815AC0",
+              width: "180px",
+              height: "40px",
+              borderRadius: "10px",
+              color: "#FFFFFF",
+              textAlign: "center",
+              margin: "auto",
+              border: "none",
+            }}
+          >
+            Dashboard
+          </button>
         </div>
         <div
+          class="col-10"
           style={{
-            width: "100%",
-            height: "auto",
-            backgroundColor: "#ffffff",
-            borderRadius: "30px",
-            marginTop: "20px",
-            padding: "15px",
+            padding: "0px",
+            margin: "0",
+            backgroundColor: "#fafcff",
+            height: "100vh",
+            boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <p1>Recent Projects</p1>
-          <br></br>
-          <br></br>
-          <div class="row">
-            {projects.map((project) => (
-              <div class="col-4">
-                <div
-                  style={{
-                    width: "200px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba( 255, 255, 255, 0.18 )",
-                  }}
-                >
-                  <iframe
-                    style={{ borderRadius: "10px 10px 0px 0px" }}
-                    width="200"
-                    height="100"
-                    src={
-                      "https://www.youtube.com/embed/" +
-                      project.video_link.slice(
-                        project.video_link.indexOf("=") + 1
-                      )
-                    }
-                  ></iframe>
-                  <div class="card-body">
-                    <p class="card-text">
-                      <h4>{project.project_name}</h4>
-                      <div>Created on {project.created_on.slice(0, 10)}</div>
-                    </p>
+          <div
+            style={{
+              marginLeft: "50px",
+              marginTop: "20px",
+            }}
+          >
+            <div className="roboto-mono" style={{ fontSize: "20px" }}>
+              Hi, {username}
+            </div>
+            <div className="roboto-mono" style={{ fontSize: "30px" }}>
+              Welcome Back!
+            </div>
+          </div>
+          <div
+            style={{
+              width: "90%",
+              height: "auto",
+              backgroundColor: "#FFFFFF",
+              borderRadius: "10px",
+              margin: "50px",
+              padding: "15px",
+              boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <img
+              src={recent}
+              width="40px"
+              height="40px"
+              style={{ display: "inline" }}
+            ></img>
+            <h1
+              class="roboto-mono"
+              style={{
+                display: "inline",
+                paddingLeft: "10px",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Recent Projects
+            </h1>
+            <br></br>
+            <br></br>
+            <div class="row">
+              {projects.map((project) => (
+                <div class="col-3">
+                  <div
+                    style={{
+                      width: "200px",
+                      borderRadius: "10px",
+                      border: "1px solid rgba( 255, 255, 255, 0.18 )",
+                    }}
+                  >
+                    <iframe
+                      style={{ borderRadius: "10px 10px 0px 0px" }}
+                      width="200"
+                      height="100"
+                      src={
+                        "https://www.youtube.com/embed/" +
+                        project.video_link.slice(
+                          project.video_link.indexOf("=") + 1
+                        )
+                      }
+                    ></iframe>
+                    <div class="card-body">
+                      <p class="card-text">
+                        <h4>{project.project_name}</h4>
+                        <div>Created on {project.created_on.slice(0, 10)}</div>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+          <div
+            style={{
+              width: "80%",
+              height: "auto",
+              backgroundColor: "#FFFFFF",
+              borderRadius: "10px",
+              margin: "40px",
+              padding: "15px",
+              boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <p1>Recent Projects</p1>
+            <br></br>
+            <br></br>
+            <div class="row">
+              {projects.map((project) => (
+                <div class="col-3">
+                  <div
+                    style={{
+                      width: "200px",
+                      borderRadius: "10px",
+                      border: "1px solid rgba( 255, 255, 255, 0.18 )",
+                    }}
+                  >
+                    <iframe
+                      style={{ borderRadius: "10px 10px 0px 0px" }}
+                      width="200"
+                      height="100"
+                      src={
+                        "https://www.youtube.com/embed/" +
+                        project.video_link.slice(
+                          project.video_link.indexOf("=") + 1
+                        )
+                      }
+                    ></iframe>
+                    <div class="card-body">
+                      <p class="card-text">
+                        <h4>{project.project_name}</h4>
+                        <div>Created on {project.created_on.slice(0, 10)}</div>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-5"></div>
     </div>
     // <div
     //   className="manrope"

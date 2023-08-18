@@ -48,7 +48,16 @@ def speech_recognition(link):
         transcription = tokenizer.batch_decode(prediction)[0]
         transcript += transcription.lower() + " "
 
-    return add_punctuation(transcript)
+    punctuated_text = ""
+    while True:
+        if len(transcript) <= 400:
+            punctuated_text += add_punctuation(transcript)
+            break
+
+        punctuated_text += add_punctuation(transcript[:400]) + " "
+        transcript = transcript[400:]
+
+    return punctuated_text
 
 
 def add_punctuation(text):
@@ -56,7 +65,7 @@ def add_punctuation(text):
 
     tokenizer = T5Tokenizer.from_pretrained("SJ-Ray/Re-Punctuate")
     model = TFT5ForConditionalGeneration.from_pretrained("SJ-Ray/Re-Punctuate")
-    inputs = tokenizer.encode("punctuate: " + text, return_tensors="tf")
+    inputs = tokenizer.encode("punctuate: " + text[:500], return_tensors="tf", )
     result = model.generate(inputs, max_new_tokens=512)
     decoded_output = tokenizer.decode(result[0], skip_special_tokens=True)
 

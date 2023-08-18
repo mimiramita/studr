@@ -11,10 +11,11 @@ from project.utils import answer_question
 from project.models import Project, Folder
 from .serializers import ProjectInfo, ProjectInfoSerializer, FolderInfo, FolderInfoSerializer
 
-#start every time
-#celery -A studr worker -l info
-#brew services restart redis
-#redis-cli shutdown
+# start every time
+# celery -A studr worker -l info
+# brew services restart redis
+# redis-cli shutdown
+# cipher.py re.compile(r"^\$*\w+\W")
 class CreateProject(APIView):
     permission_classes = [IsAuthenticated,]
     project_title = openapi.Parameter(
