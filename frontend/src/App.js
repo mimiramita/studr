@@ -8,6 +8,7 @@ import QueryBox from "./pages/Query";
 import QueryTest from "./pages/QueryTest";
 import SignIn from "./pages/Signin";
 import DashBoard from "./pages/Dashboard";
+import Project from "./pages/Project";
 import "animate.css";
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="query" element={<QueryBox />} />
           <Route path="testquery" element={<QueryTest />} />
           <Route path="dashboard" element={<DashBoard />} />
+          <Route path="project" element={<Project />} />
         </Route>
       </Routes>
     </BrowserRouter>

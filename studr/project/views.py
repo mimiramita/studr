@@ -21,9 +21,10 @@ class CreateProject(APIView):
     project_title = openapi.Parameter(
         "project_title", in_=openapi.IN_QUERY, type=openapi.TYPE_STRING
     )
+    folder = openapi.Parameter("folder", in_=openapi.IN_QUERY, type=openapi.TYPE_STRING)
     link = openapi.Parameter("link", in_=openapi.IN_QUERY, type=openapi.TYPE_STRING)
     @swagger_auto_schema(
-        manual_parameters=[project_title, link],
+        manual_parameters=[project_title, folder, link],
     )
     def post(self, request):
         try:
@@ -74,6 +75,21 @@ class GetProjects(APIView):
             user = request.user
             account = Account.objects.filter(user=user)[0]
             projects = Project.objects.filter(owner=account)
+            projects_info = [ProjectInfo(project.project_id, project.project_name, project.owner.account_id, project.created_on, project.video_link, project.text) for project in projects]
+            serialized_projects = [ProjectInfoSerializer(project).data for project in projects_info]
+            return Response({'status': 'success', 'response': serialized_projects}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            )
+        
+class GetRecentProjects(APIView):
+    permission_classes = [IsAuthenticated,]
+    def get(self, request):
+        try:
+            user = request.user
+            account = Account.objects.filter(user=user)[0]
+            projects = Project.objects.filter(owner=account).order_by("-created_on")
             projects_info = [ProjectInfo(project.project_id, project.project_name, project.owner.account_id, project.created_on, project.video_link, project.text) for project in projects]
             serialized_projects = [ProjectInfoSerializer(project).data for project in projects_info]
             return Response({'status': 'success', 'response': serialized_projects}, status=status.HTTP_200_OK)

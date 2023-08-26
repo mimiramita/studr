@@ -15,4 +15,6 @@ class Folder(models.Model):
     folder_name = models.CharField(max_length=50, null=True)
     owner = models.ForeignKey('core.Account', on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True, null=True)
-    projects = models.ManyToManyField('project.Project', blank=True)
+
+# class Question(models.Model):
+#     question_id = models.AutoField(primar)
