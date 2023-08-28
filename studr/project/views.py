@@ -8,8 +8,8 @@ from core.models import Account
 from rest_framework.permissions import IsAuthenticated
 from project.tasks import create_project
 from project.utils import answer_question
-from project.models import Project, Folder
-from .serializers import ProjectInfo, ProjectInfoSerializer, FolderInfo, FolderInfoSerializer
+from project.models import Project, Folder, Question
+from .serializers import ProjectInfo, ProjectInfoSerializer, FolderInfo, FolderInfoSerializer, QuestionInfo, QuestionInfoSerializer
 
 # start every time
 # celery -A studr worker -l info
@@ -42,8 +42,6 @@ class CreateProject(APIView):
                 {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
             )
         
-# unauthorize might be the format of get check again
-# modify both
 class AnswerQuestion(APIView):
     permission_classes = [IsAuthenticated,]
     project_name = openapi.Parameter(
@@ -55,15 +53,21 @@ class AnswerQuestion(APIView):
     @swagger_auto_schema(
         manual_parameters=[project_name, question]
     )
-    def get(self, request):
+    def post(self, request):
         try:
             user = request.user
             account = Account.objects.filter(user=user)[0]
-            active_project = Project.objects.filter(owner=account, project_name=request.query_params["project_name"])[0]
+            project_info = json.loads(request.body.decode("utf-8"))
+            print(project_info)
+            active_project = Project.objects.filter(owner=account, project_name=project_info["project_name"])[0]
             context = active_project.text
-            answer = answer_question(context, request.query_params["question"])
+            question = project_info["question"]
+            answer = answer_question(context, question)
+            new_question = Question.objects.create(project=active_project, question=question, answer=answer)
+            new_question.save()
             return Response({'status': 'success', 'response': answer}, status=status.HTTP_200_OK)
         except Exception as e:
+            print(e)
             return Response(
                 {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
             )
@@ -122,5 +126,24 @@ class GetFolders(APIView):
                 {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
             )
 
-
+class GetQuestions(APIView):
+    permission_classes = [IsAuthenticated,]
+    project_id = openapi.Parameter(
+        "project_id", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER
+    )
+    @swagger_auto_schema(
+        manual_parameters=[project_id]
+    )
+    def get(self, request):
+        try:
+            user = request.user
+            project_id = request.GET.get("project_id")
+            questions = Question.objects.filter(project_id=project_id)
+            question_info = [QuestionInfo(question.question_id, question.project.project_id, question.question, question.answer, question.created_on) for question in questions]
+            serialized_questions = [QuestionInfoSerializer(question).data for question in question_info]
+            return Response({'status': 'success', 'response': serialized_questions}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            )
 # try returning list and other variables

@@ -16,5 +16,9 @@ class Folder(models.Model):
     owner = models.ForeignKey('core.Account', on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True, null=True)
 
-# class Question(models.Model):
-#     question_id = models.AutoField(primar)
+class Question(models.Model):
+    question_id = models.AutoField(primary_key=True)
+    project = models.ForeignKey('project.Project', on_delete=models.CASCADE, null=True)
+    question = models.TextField(null=True)
+    answer = models.TextField(null=True)
+    created_on = models.DateTimeField(auto_now_add=True, null=True)

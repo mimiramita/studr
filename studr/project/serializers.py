@@ -31,3 +31,18 @@ class FolderInfoSerializer(serializers.Serializer):
     account_id = serializers.IntegerField()
     created_on = serializers.DateTimeField()
     projects = serializers.ListField()
+
+class QuestionInfo:
+    def __init__(self, question_id, project_id, question, answer, created_on):
+        self.question_id = question_id
+        self.project_id = project_id
+        self.question = question
+        self.answer = answer
+        self.created_on = created_on
+
+class QuestionInfoSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField()
+    project_id = serializers.IntegerField()
+    question = serializers.CharField()
+    answer = serializers.CharField()
+    created_on = serializers.DateTimeField()

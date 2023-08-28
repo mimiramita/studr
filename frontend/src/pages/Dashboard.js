@@ -4,7 +4,7 @@ import axios from "axios";
 import logo from "../PlayLamp.png";
 import recent from "../recent.png";
 import user from "../user.png";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Link } from "react-router-dom";
 
 function DashBoard() {
   const navigate = useNavigate();
@@ -17,6 +17,12 @@ function DashBoard() {
   const [username, setUsername] = useState(null);
   const navigateCreateProject = () => {
     navigate("/createproject");
+  };
+
+  const toProject = (projectName, projectLink, projectID) => {
+    navigate("/project", {
+      state: { projectName: projectName, projectLink: projectLink, projectID: projectID },
+    });
   };
   // even for get requests if
   useEffect(() => {
@@ -215,27 +221,28 @@ function DashBoard() {
                         )
                       }
                     ></iframe>
-                    <div class="card-body">
-                      <p
-                        class="card-text roboto-mono"
-                        style={{ padding: "0px 10px 10px 10px" }}
-                      >
-                        <h5
-                          className="manrope"
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "16px",
-                            marginBottom: "0",
-                           
-                          }}
+                    <a onClick={() => toProject(project.project_name, project.video_link, project.project_id)}>
+                      <div class="card-body">
+                        <p
+                          class="card-text roboto-mono"
+                          style={{ padding: "0px 10px 10px 10px" }}
                         >
-                          {project.project_name}
-                        </h5>
-                        <div className="manrope" style={{ fontSize: "12px"}}>
-                          {project.created_on.slice(0, 10)}
-                        </div>
-                      </p>
-                    </div>
+                          <h5
+                            className="manrope"
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: "16px",
+                              marginBottom: "0",
+                            }}
+                          >
+                            {project.project_name}
+                          </h5>
+                          <div className="manrope" style={{ fontSize: "12px" }}>
+                            {project.created_on.slice(0, 10)}
+                          </div>
+                        </p>
+                      </div>
+                    </a>
                   </div>
                 </div>
               ))}

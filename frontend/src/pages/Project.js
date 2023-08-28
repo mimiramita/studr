@@ -1,26 +1,67 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import axios from "axios";
 import logo from "../PlayLamp.png";
 import recent from "../recent.png";
 import user from "../user.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import line from "../line.png";
 
 function Project() {
   const [height, setHeight] = useState(240);
   const [isResizing, setIsResizing] = useState(false);
   const [mouse, setMouse] = useState("up");
-  const [position, setPosition] = useState(null);
+  const [question, setQuestion] = useState(null);
+  const [questions, setQuestions] = useState([]);
   const navigate = useNavigate();
   const token = sessionStorage.getItem("access_token");
   if (token == null) {
     window.location.href = "/login";
   }
-  const [projects, setProjects] = useState([]);
-  const [folders, setFolders] = useState([]);
-  const [username, setUsername] = useState(null);
+  const location = useLocation();
+  const questionRef = useRef(null);
 
+  const submit = async (e) => {
+    e.preventDefault();
+    const project = {
+      project_name: location.state.projectName,
+      question: question,
+    };
+    if (token == null) {
+      window.location.href = "/login";
+    }
+    try {
+      axios.defaults.withCredentials = true; // even for get requests if
+      // demand session authentication
+      const { data } = await axios.post(
+        "http://localhost:8000/project/answerquestion/",
+        project,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (e) {
+      alert(e);
+    }
+    setQuestion(null);
+    questionRef.current.value = "";
+    axios
+      .get("http://localhost:8000/project/getquestions/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        params: {
+          project_id: location.state.projectID,
+        },
+      })
+      .then((response) => {
+        setQuestions(response.data.response);
+      });
+  };
   const handleMouseDown = (e) => {
     const project_video = document.querySelector(".project_video");
     project_video.style.cssText += "pointer-events: none;";
@@ -30,8 +71,11 @@ function Project() {
 
   const handleMouseMove = (e) => {
     if (!isResizing) return;
-    setHeight(window.innerHeight - e.clientY);
-    setPosition(e.clientY);
+    let new_height = window.innerHeight - e.clientY;
+    if (new_height < 100) {
+      new_height = 100;
+    }
+    setHeight(new_height);
   };
 
   const handleMouseUp = (e) => {
@@ -43,27 +87,17 @@ function Project() {
   // even for get requests if
   useEffect(() => {
     axios
-      .get("http://localhost:8000/project/getrecentprojects/", {
+      .get("http://localhost:8000/project/getquestions/", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      })
-      .then((response) => {
-        setProjects(response.data.response);
-      });
-    if (projects.length > 4) {
-      setProjects(projects.slice(0, 4));
-    }
-    axios
-      .get("http://localhost:8000/core/getusername/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "applciation/json",
+        params: {
+          project_id: location.state.projectID,
         },
       })
       .then((response) => {
-        setUsername(response.data.response);
+        setQuestions(response.data.response);
       });
   }, []);
   // const toProject = (project_id) => {
@@ -75,21 +109,33 @@ function Project() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      {projects[0] == null ? (
-        <div></div>
-      ) : (
-        <iframe
-          className="project_video"
-          width="100%"
-          height="100%"
-          src={
-            "https://www.youtube.com/embed/" +
-            projects[0].video_link.slice(
-              projects[0].video_link.indexOf("=") + 1
-            )
-          }
-        ></iframe>
-      )}
+      <div
+        className="roboto-mono"
+        style={{
+          width: "100%",
+          height: "50px",
+          backgroundColor: "#fafcff",
+        }}
+      >
+        <p style={{ padding: "10px", fontSize: "20px", fontWeight: "bold" }}>{location.state.projectName}</p>
+      </div>
+      <iframe
+        className="project_video"
+        width="100%"
+        height={window.innerHeight - 50 - 100}
+        // src={
+        //   "https://www.youtube.com/embed/" +
+        //   projects[0].video_link.slice(
+        //     projects[0].video_link.indexOf("=") + 1
+        //   )
+        // }
+        src={
+          "https://www.youtube.com/embed/" +
+          location.state.projectLink.slice(
+            location.state.projectLink.indexOf("=") + 1
+          )
+        }
+      ></iframe>
       <div
         style={{
           position: "absolute",
@@ -97,9 +143,9 @@ function Project() {
           left: "0px",
           width: "100vw",
           height: `${height}px`,
-          backgroundColor: "white",
-          overflow: "hidden",
+          backgroundColor: "#fafcff",
           textAlign: "center",
+          overflow: "hidden",
         }}
       >
         <img
@@ -111,10 +157,10 @@ function Project() {
         ></img>
         <div
           style={{
-            overflowY: "scroll",
+            overflow: "scroll",
             width: "95%",
-            height: `${height-30}px`,
-            backgroundColor: "green",
+            height: `${height - 30}px`,
+            backgroundColor: "#fafcff",
             margin: "auto",
             position: "absolute",
             top: "30px",
@@ -122,18 +168,104 @@ function Project() {
             display: "flex",
             alignItems: "flex-end",
             paddingBottom: "15px",
+            textAlign: "center",
+            // flexWrap: "wrap",
           }}
         >
-          <form
-            // onSubmit={submit}
-            style={{margin: "0 auto", width: "100%"}}
+          <div
+            style={{
+              width: "95%",
+              // height: "auto",
+              height: `${height - 110}px`,
+              backgroundColor: "#fafcff",
+              position: "absolute",
+              bottom: "80px",
+              left: "2.5%",
+              overflow: "scroll",
+              display: "flex",
+              flexDirection: "column-reverse",
+              margin: "auto",
+            }}
           >
-                <input type="text" placeholder="Ask any question!" style={{marginRight: "5px", backgroundColor: "#ebeef4", borderRadius: "5px", border: "none", width: "90%"}}/><button>Click</button>
+            <div style={{ backgroundColor: "#fafcff", height: "auto" }}>
+              {questions.map((question) => (
+                <div
+                  className="manrope"
+                  style={{
+                    width: "max-content",
+                    maxWidth: "80%",
+                    height: "auto",
+                    backgroundColor: "white",
+                    margin: "20px",
+                    marginLeft: "10px",
+                    borderRadius: "10px",
+                    borderTopLeftRadius: "15px",
+                    borderTopRightRadius: "15px",
+                    boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: "#aa88d6",
+                      padding: "10px",
+                      borderRadius: "10px",
+                      borderBottomLeftRadius: "0px",
+                      borderBottomRightRadius: "0px",
+                      textAlign: "left",
+                      fontWeight: "bold",
+                      color: "white",
+                    }}
+                  >
+                    {question.question}
+                  </div>
+                  <div style={{ textAlign: "left" }}>
+                    <p style={{ padding: "10px" }}>{question.answer}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <form
+            className="manrope"
+            onSubmit={submit}
+            style={{
+              margin: "0 auto",
+              width: "100%",
+              position: "absolute",
+              bottom: "25px",
+            }}
+          >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Ask any question!"
+              ref={questionRef}
+              style={{
+                marginRight: "10px",
+                backgroundColor: "#ebeef4",
+                // border: "none",
+                width: "90%",
+                display: "inline-block",
+                // boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
+              }}
+              name="question"
+              value={question}
+              required
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+            <button
+              type="submit"
+              class="btn btn-primary"
+              style={{
+                backgroundColor: "#7b5eba",
+                border: "none",
+                marginBottom: "3px",
+              }}
+            >
+              Enter
+            </button>
           </form>
         </div>
-        <p>
-          {mouse} {position} {height}
-        </p>
       </div>
     </div>
     //   Hi
