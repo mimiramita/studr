@@ -4,11 +4,12 @@ import axios from "axios";
 import logo from "../PlayLamp.png";
 import recent from "../recent.png";
 import user from "../user.png";
+import rightArrow from "../right-arrow.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import line from "../line.png";
 
 function Project() {
-  const [height, setHeight] = useState(240);
+  const [height, setHeight] = useState(120);
   const [isResizing, setIsResizing] = useState(false);
   const [mouse, setMouse] = useState("up");
   const [question, setQuestion] = useState(null);
@@ -84,6 +85,10 @@ function Project() {
     setIsResizing(false);
     setMouse("up");
   };
+
+  const navigateDashboard = () => {
+    navigate("/dashboard");
+  }
   // even for get requests if
   useEffect(() => {
     axios
@@ -117,18 +122,62 @@ function Project() {
           backgroundColor: "#fafcff",
         }}
       >
-        <p style={{ padding: "10px", fontSize: "20px", fontWeight: "bold" }}>{location.state.projectName}</p>
+        <p style={{ padding: "10px", fontSize: "20px", fontWeight: "bold" }}>
+          {location.state.projectName}
+        </p>
+        <div style={{ position: "absolute", right: "200px", top: "5px" }}>
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "white",
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              padding: "5px 10px 10px 11px",
+              marginRight: "10px",
+              textAlign: "center",
+              boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
+              display: "inline-block",
+            }}
+          >
+            <img src={user} width="20px" height="20px"></img>
+          </button>
+        </div>
+        <div
+          className="manrope"
+          style={{
+            display: "inline-block",
+            paddingTop: "8px",
+            position: "absolute",
+            right: "50px",
+            top: "5px",
+          }}
+        >
+          Back to dashboard
+        </div>
+        <div style={{ position: "absolute", right: "0px", top: "7px" }}>
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "#fafcff",
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              padding: "5px 10px 10px 11px",
+              marginRight: "10px",
+              textAlign: "center",
+              display: "inline-block",
+            }}
+            onClick={navigateDashboard}
+          >
+            <img src={rightArrow} width="20px" height="20px"></img>
+          </button>
+        </div>
       </div>
       <iframe
         className="project_video"
         width="100%"
         height={window.innerHeight - 50 - 100}
-        // src={
-        //   "https://www.youtube.com/embed/" +
-        //   projects[0].video_link.slice(
-        //     projects[0].video_link.indexOf("=") + 1
-        //   )
-        // }
         src={
           "https://www.youtube.com/embed/" +
           location.state.projectLink.slice(
@@ -257,7 +306,7 @@ function Project() {
               type="submit"
               class="btn btn-primary"
               style={{
-                backgroundColor: "#7b5eba",
+                backgroundColor: "#ef7a85",
                 border: "none",
                 marginBottom: "3px",
               }}
